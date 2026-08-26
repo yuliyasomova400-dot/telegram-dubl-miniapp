@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#7057e8" />
     <title>Дубль — Telegram Mini App</title>
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=11" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
@@ -32,7 +32,25 @@
           <button class="primary-button" data-mode="solo"><span>▶</span><b>Играть на время</b><small>60 секунд · личный рекорд</small></button>
           <button class="secondary-button" data-mode="duel"><span>⚔</span><b>Дуэль на одном телефоне</b><small>Первый до 7 очков</small></button>
           <button class="secondary-button online-button" id="onlineButton"><span>↗</span><b>Играть с другом</b><small>Приглашение · два телефона</small></button>
+          <button class="secondary-button ranking-button" id="rankingButton"><span>🏆</span><b>Рейтинг игроков</b><small>Партии · победы · поражения</small></button>
         </div>
+      </section>
+
+      <section id="rankingScreen" class="screen ranking-screen">
+        <div class="ranking-heading">
+          <div class="ranking-icon">🏆</div>
+          <div><p class="eyebrow">ТАБЛИЦА ЛИДЕРОВ</p><h2>Рейтинг</h2></div>
+        </div>
+        <div class="my-ranking" id="myRanking">
+          <small>ВАШЕ МЕСТО</small>
+          <strong id="myRank">—</strong>
+          <span id="myStats">После первой сетевой партии</span>
+        </div>
+        <div class="ranking-table">
+          <div class="ranking-header"><span>Место и игрок</span><span>Игры</span><span>В</span><span>П</span></div>
+          <div id="rankingList" class="ranking-list"><p class="ranking-message">Загружаем рейтинг…</p></div>
+        </div>
+        <button class="text-button ranking-back" id="rankingBackButton">На главную</button>
       </section>
 
       <section id="onlineScreen" class="screen online-screen">
@@ -87,6 +105,6 @@
       <ol><li>Сравни две карточки.</li><li>Нажми на общий символ.</li><li>За верный ответ получи очко.</li></ol>
     </dialog>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-    <script src="app.js?v=12"></script>
+    <script src="app.js?v=13"></script>
   </body>
 </html>
