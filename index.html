@@ -12,7 +12,12 @@
     <main class="app">
       <header class="topbar">
         <button class="icon-button" id="soundButton" aria-label="Звук включён">♪</button>
-        <div class="brand"><span>✦</span> ДУБЛЬ</div>
+        <div class="brand" id="brand"><span>✦</span> ДУБЛЬ</div>
+        <div class="header-status" id="headerStatus">
+          <div><small id="headerLeftLabel">ОЧКИ</small><strong id="headerLeftScore">0</strong></div>
+          <div class="header-time"><small>ВРЕМЯ</small><strong id="headerTimer">01:00</strong></div>
+          <div><small id="headerRightLabel">РЕКОРД</small><strong id="headerRightScore">0</strong></div>
+        </div>
         <button class="icon-button" id="rulesButton" aria-label="Правила">?</button>
       </header>
 
@@ -35,7 +40,7 @@
       </section>
 
       <section id="gameScreen" class="screen">
-        <div class="game-status">
+        <div class="game-status" aria-hidden="true">
           <div><small id="leftLabel">ОЧКИ</small><strong id="leftScore">0</strong></div>
           <div class="timer"><small>ВРЕМЯ</small><strong id="timer">01:00</strong></div>
           <div><small id="rightLabel">РЕКОРД</small><strong id="rightScore">0</strong></div>
