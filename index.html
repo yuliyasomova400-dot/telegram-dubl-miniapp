@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#7057e8" />
     <title>Дубль — Telegram Mini App</title>
-    <link rel="stylesheet" href="styles.css?v=8" />
+    <link rel="stylesheet" href="styles.css?v=10" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
@@ -31,7 +31,21 @@
         <div class="menu">
           <button class="primary-button" data-mode="solo"><span>▶</span><b>Играть на время</b><small>60 секунд · личный рекорд</small></button>
           <button class="secondary-button" data-mode="duel"><span>⚔</span><b>Дуэль на одном телефоне</b><small>Первый до 7 очков</small></button>
+          <button class="secondary-button online-button" id="onlineButton"><span>↗</span><b>Играть с другом</b><small>Приглашение · два телефона</small></button>
         </div>
+      </section>
+
+      <section id="onlineScreen" class="screen online-screen">
+        <div class="online-icon">⚔</div>
+        <p class="eyebrow">СЕТЕВАЯ ИГРА</p>
+        <h2 id="onlineTitle">Пригласите друга</h2>
+        <p id="onlineText">Создайте комнату и отправьте ссылку второму игроку.</p>
+        <div class="room-code" id="roomCode">------</div>
+        <div class="online-loader" id="onlineLoader" hidden><i></i><i></i><i></i></div>
+        <button class="primary-button compact" id="createRoomButton"><b>Создать комнату</b></button>
+        <button class="secondary-button compact" id="shareRoomButton" hidden><b>Пригласить в Telegram</b></button>
+        <button class="secondary-button compact" id="copyRoomButton" hidden><b>Скопировать ссылку</b></button>
+        <button class="text-button online-back" id="onlineBackButton">На главную</button>
       </section>
 
       <section id="gameScreen" class="screen">
@@ -72,6 +86,7 @@
       <p>На двух карточках всегда есть ровно один одинаковый символ. Найди его и нажми быстрее!</p>
       <ol><li>Сравни две карточки.</li><li>Нажми на общий символ.</li><li>За верный ответ получи очко.</li></ol>
     </dialog>
-    <script src="app.js?v=8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+    <script src="app.js?v=11"></script>
   </body>
 </html>
