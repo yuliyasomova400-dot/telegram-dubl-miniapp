@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#7057e8" />
     <title>Дубль — Telegram Mini App</title>
-    <link rel="stylesheet" href="styles.css?v=11" />
+    <link rel="stylesheet" href="styles.css?v=12" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
@@ -34,6 +34,25 @@
           <button class="secondary-button online-button" id="onlineButton"><span>↗</span><b>Играть с другом</b><small>Приглашение · два телефона</small></button>
           <button class="secondary-button ranking-button" id="rankingButton"><span>🏆</span><b>Рейтинг игроков</b><small>Партии · победы · поражения</small></button>
         </div>
+      </section>
+
+      <section id="fieldChoiceScreen" class="screen field-choice-screen">
+        <p class="eyebrow">ДУЭЛЬ НА ОДНОМ ТЕЛЕФОНЕ</p>
+        <h2>Выберите поле</h2>
+        <p>На каком оформлении будете играть?</p>
+        <div class="field-options">
+          <button class="field-option" data-field="classic">
+            <span class="field-preview classic-preview"><i>★</i><i>♥</i><i>☀</i></span>
+            <b>Классическое</b>
+            <small>Светлые круглые карточки</small>
+          </button>
+          <button class="field-option mermaid-option" data-field="mermaid">
+            <span class="field-preview mermaid-preview"><i>⚓</i><i>💎</i><i>🦋</i></span>
+            <b>Русалочка</b>
+            <small>Чешуя, жемчуг и кораллы</small>
+          </button>
+        </div>
+        <button class="text-button field-choice-back" id="fieldChoiceBackButton">На главную</button>
       </section>
 
       <section id="rankingScreen" class="screen ranking-screen">
@@ -105,6 +124,6 @@
       <ol><li>Сравни две карточки.</li><li>Нажми на общий символ.</li><li>За верный ответ получи очко.</li></ol>
     </dialog>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-    <script src="app.js?v=24"></script>
+    <script src="app.js?v=25"></script>
   </body>
 </html>
