@@ -1,11 +1,4 @@
-const SYMBOLS = [
-  '☀️','🌙','⭐','❤️','⚡','🔥','🍀','🌈','❄️','🌸','🌻','🍄',
-  '🚀','🚗','🚲','✈️','🚂','⛵','🛸','🚁','🎈','🎁','🎵','🎸',
-  '🐙','🦋','🐳','🦄','🐝','🐞','🐢','🦊','🐼','🐸','🐧','🦁',
-  '🍓','🍉','🍕','🍒','🍋','🥝','🍩','🧁','🍦','🥕','🌽','🍪',
-  '👑','💎','🧿','⚓','🔑','🔔','🧲','🎲','🪁','⚽','🎯','🧩',
-  '👻','🤖','👽','🥳','😎','🤠','💡','⌛','☂️','🧸','📷','🔮'
-];
+const SYMBOLS = ['☀️','🌙','⭐','❤️','⚡','🔥','🍀','🌈','🚀','🐙','🦋','🍓','🎈','👑','💎','🎵','👻','🧿','🌵','🍕','🐳','🦄','⚓','🍉'];
 const POSITIONS = [[50,18,-8],[23,35,12],[76,37,-12],[49,51,7],[25,69,-6],[75,70,9],[50,83,-3]];
 const state={mode:'solo',score:0,other:0,time:60,timer:null,match:null,sound:true,turn:1,lastMode:'solo',room:null,user:null,channel:null,poller:null,onlineBusy:false,renderedTurn:-1,confirmingReady:false,readyFallback:null};
 const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
@@ -20,7 +13,7 @@ function clickFeedback(button){button?.classList.add('button-pulse');setTimeout(
 function syncHeader(){['LeftScore','RightScore'].forEach(k=>$('#header'+k).textContent=$('#'+k[0].toLowerCase()+k.slice(1)).textContent);$('#headerTimer').textContent=$('#timer').textContent;$('#headerLeftLabel').textContent=$('#leftLabel').textContent;$('#headerRightLabel').textContent=$('#rightLabel').textContent}
 function show(id){$$('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');$('.app').classList.toggle('playing',id==='#gameScreen')}
 function sample(arr,n,exclude=[]){return [...arr].filter(x=>!exclude.includes(x)).sort(()=>Math.random()-.5).slice(0,n)}
-function makeRound(){const match=sample(SYMBOLS,1,state.match?[state.match]:[])[0];state.match=match;const left=[match,...sample(SYMBOLS,6,[match])].sort(()=>Math.random()-.5);const right=[match,...sample(SYMBOLS,6,[match,...left.filter(x=>x!==match)])].sort(()=>Math.random()-.5);renderCards([left,right])}
+function makeRound(){const match=sample(SYMBOLS,1)[0];state.match=match;const left=[match,...sample(SYMBOLS,6,[match])].sort(()=>Math.random()-.5);const right=[match,...sample(SYMBOLS,6,[match,...left.filter(x=>x!==match)])].sort(()=>Math.random()-.5);renderCards([left,right])}
 function renderCards(cards){cards.forEach((items,index)=>{const card=document.createElement('div');card.className='card';items.forEach((symbol,i)=>{const b=document.createElement('button');b.className='symbol';b.textContent=symbol;b.setAttribute('aria-label',symbol);const [x,y,r]=POSITIONS[i];b.style=`left:calc(${x}% - 38px);top:calc(${y}% - 38px);transform:rotate(${r}deg) scale(${.8+Math.random()*.25})`;b.onclick=()=>pick(b,symbol);card.append(b)});$(index===0?'#topCard':'#bottomCard').replaceChildren(card)})}
 function pick(button,symbol){if(state.mode==='online')return pickOnline(button,symbol);if(symbol===state.match){button.classList.add('correct');tone(720,.12,'sine',.05);setTimeout(()=>tone(940,.13,'sine',.035),65);haptic('medium');if(state.mode==='solo'){state.score++;$('#leftScore').textContent=state.score}else{if(state.turn===1)state.score++;else state.other++;updateDuel();if(state.score>=10||state.other>=10)return setTimeout(endGame,350);state.turn=state.turn===1?2:1}syncHeader();setTimeout(makeRound,260)}else{button.classList.add('wrong');tone(145,.15,'sawtooth',.035);haptic('heavy');setTimeout(()=>button.classList.remove('wrong'),320);if(state.mode==='solo'&&state.score>0){state.score--;$('#leftScore').textContent=state.score;syncHeader()}else if(state.mode==='duel'){if(state.turn===1)state.score=Math.max(0,state.score-1);else state.other=Math.max(0,state.other-1);updateDuel();syncHeader()}}}
 function updateDuel(){$('#leftScore').textContent=state.score;$('#rightScore').textContent=state.other;$('#turnBanner').textContent=`Ход игрока ${state.turn===1?2:1}`;syncHeader()}
