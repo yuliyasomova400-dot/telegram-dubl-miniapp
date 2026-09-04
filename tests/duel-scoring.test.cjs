@@ -4,6 +4,19 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 
+test('scattered symbols vary in size and stay separated inside the circle',()=>{
+  const g=game();
+  for(const count of [6,7])for(let round=0;round<100;round++){
+    const layout=g.run('scatteredLayout('+count+')');
+    assert.equal(layout.length,count);
+    assert.ok(Math.max(...layout.map(p=>p.size))/Math.min(...layout.map(p=>p.size))>1.5);
+    for(const [i,p] of layout.entries()){
+      assert.ok(Math.hypot(p.x-50,p.y-50)+p.radius<=47.001);
+      for(const q of layout.slice(i+1))assert.ok(Math.hypot(p.x-q.x,p.y-q.y)>=p.radius+q.radius);
+    }
+  }
+});
+
 function game(){
   const nodes=new Map(), timers=new Map();let nextTimer=0,now=0;
   const node=()=>({textContent:'',children:[],dataset:{},style:{},classList:{add(){},remove(){},toggle(){},contains(){return true}},setAttribute(){},append(x){this.children.push(x)},replaceChildren(...xs){this.children=xs}});

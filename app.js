@@ -7,9 +7,28 @@ const ANIMAL_ATLAS = 'assets/animals-atlas-v1.png';
 const ANIMAL_REGIONS = [[25,15,285],[340,25,270],[640,0,310],[945,15,285],[20,310,285],[340,320,285],[630,315,290],[950,325,285],[15,620,300],[340,620,290],[615,625,290],[915,615,320],[25,915,300],[330,910,280],[605,900,305],[943,900,310]];
 const DUEL_ROUND_PAUSE = 420;
 const DUEL_NEW_ROUND_GUARD = 300;
-const ANIMAL_POSITIONS = [[32,23,-6],[68,24,5],[25,50,5],[73,51,-6],[34,77,-4],[67,77,6]];
-const POSITIONS = [[50,18,-8],[23,35,12],[76,37,-12],[49,51,7],[25,69,-6],[75,70,9],[50,83,-3]];
-const MERMAID_POSITIONS = [[50,27,-8],[31,40,12],[69,40,-12],[50,52,7],[32,64,-6],[68,64,9],[50,75,-3]];
+// Pack differently sized symbols inside the circle, including rotated corners.
+function scatteredLayout(count,random=Math.random){
+  const sizes=count===6?[28,25,23,21,19,17]:[26,24,22,20,19,17,16];
+  for(let attempt=0;attempt<80;attempt++){
+    const layout=[],shrink=Math.pow(.985,Math.floor(attempt/2));
+    for(let i=0;i<count;i++){
+      const size=sizes[i]*shrink,radius=size/Math.SQRT2*1.08;
+      let placed=false;
+      for(let trial=0;trial<120;trial++){
+        const angle=random()*Math.PI*2,distance=Math.sqrt(random())*(47-radius);
+        const x=50+Math.cos(angle)*distance,y=50+Math.sin(angle)*distance;
+        if(layout.every(p=>Math.hypot(x-p.x,y-p.y)>=radius+p.radius+1)){
+          layout.push({x,y,size,radius,rotation:random()*100-50});placed=true;break;
+        }
+      }
+      if(!placed)break;
+    }
+    if(layout.length===count)return layout.sort(()=>random()-.5);
+  }
+  // Bounded fallback for a pathological random source; still varied in size.
+  return Array.from({length:count},(_,i)=>({x:50+27*Math.cos(i*2*Math.PI/count),y:50+27*Math.sin(i*2*Math.PI/count),size:14+i*.3,radius:(14+i*.3)/Math.SQRT2*1.08,rotation:i*13-35}));
+}
 const state={mode:'solo',score:0,other:0,time:60,timer:null,match:null,sound:true,turn:1,lastMode:'solo',fieldTheme:'classic',inputLocked:false,localRoundId:0,localHasRound:false,localAcceptAfter:0,pendingMode:'duel',fieldLoading:false,localRoundTimer:null,room:null,user:null,channel:null,poller:null,onlineBusy:false,renderedTurn:-1,confirmingReady:false,readyFallback:null};
 const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
 const tg=window.Telegram?.WebApp; if(tg){tg.ready();tg.expand();tg.setHeaderColor('#ede8ff');tg.setBackgroundColor('#ede8ff');}
@@ -72,9 +91,9 @@ function makeRound(){
 }
 function renderCards(cards){
   const mermaid=state.fieldTheme==='mermaid',animals=state.fieldTheme==='animals';
-  const positions=animals?ANIMAL_POSITIONS:mermaid?MERMAID_POSITIONS:POSITIONS;
   const roundId=state.localRoundId;
   cards.forEach((items,index)=>{
+    const positions=scatteredLayout(items.length);
     const card=document.createElement('div');card.className='card';
     items.forEach((symbol,i)=>{
       const b=document.createElement('button');b.className='symbol';b.dataset.symbol=symbol;
@@ -88,9 +107,8 @@ function renderCards(cards){
         sprite.style.backgroundPosition=sx/(1254-size)*100+'% '+sy/(1254-size)*100+'%';
         b.append(sprite);
       }else{b.textContent=symbol}
-      const [x,y,r]=positions[i];
-      const scale=animals?.93+Math.random()*.07:mermaid?.78+Math.random()*.14:.8+Math.random()*.25;
-      b.style=`left:${x}%;top:${y}%;transform:rotate(${r}deg) scale(${scale})`;
+      const {x,y,size,rotation}=positions[i];
+      b.style=`left:${x}%;top:${y}%;width:${size}%;height:${size}%;font-size:${animals?0:size*.76}cqw;transform:rotate(${rotation}deg)`;
       let gestureAllowed;
       b.onpointerdown=()=>{gestureAllowed=state.mode==='online'||(!state.inputLocked&&roundId===state.localRoundId&&(state.mode!=='duel'||performance.now()>=state.localAcceptAfter))};
       b.onpointercancel=()=>{gestureAllowed=false};
